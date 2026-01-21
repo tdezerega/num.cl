@@ -5,10 +5,22 @@ import json
 def calculate_panels(panel_width: int, panel_height: int, 
                     roof_width: int, roof_height: int) -> int:
     
-    # Implementa acá tu solución
-    
-    return 0
+    def place(w: int, h: int) -> int:
+        cols = roof_width // w
+        rows = roof_height // h
+        total = cols * rows
 
+        remaining_width = roof_width - cols * w
+        remaining_height = roof_height - rows * h
+
+        fill_vertical = (remaining_width // h) * (roof_height // w)
+
+        fill_horizontal = (roof_width // h) * (remaining_height // w)
+
+        return total + max(fill_vertical, fill_horizontal)
+
+    return max(place(panel_width, panel_height),
+               place(panel_height, panel_width))
 
 def run_tests() -> None:
     with open('test_cases.json', 'r') as f:
