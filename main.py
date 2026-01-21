@@ -4,20 +4,22 @@ import json
 
 def calculate_panels(panel_width: int, panel_height: int, 
                     roof_width: int, roof_height: int) -> int:
-    
     def place(w: int, h: int) -> int:
-        cols = roof_width // w
+        total = 0
         rows = roof_height // h
-        total = cols * rows
 
-        remaining_width = roof_width - cols * w
-        remaining_height = roof_height - rows * h
+        for i in range(rows):
+            current_height = (i + 0.5) * h
 
-        fill_vertical = (remaining_width // h) * (roof_height // w)
+            if current_height >= roof_height:
+                break
 
-        fill_horizontal = (roof_width // h) * (remaining_height // w)
+            available_width = roof_width * (1 - current_height / roof_height)
 
-        return total + max(fill_vertical, fill_horizontal)
+            if available_width > 0:
+                total += int(available_width // w)
+
+        return total
 
     return max(place(panel_width, panel_height),
                place(panel_height, panel_width))
